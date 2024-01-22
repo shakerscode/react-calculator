@@ -37,11 +37,14 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await fetch("https://local-project.onrender.com/upload", {
-        method: "POST",
-        body: formData,
-        "Content-Type": "application/pdf",
-      });
+      const response = await fetch(
+        "https://local-project.onrender.com/upload",
+        {
+          method: "POST",
+          body: formData,
+          "Content-Type": "application/pdf",
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -77,7 +80,34 @@ function App() {
     }, 0);
   };
 
-  console.log(result);
+  const getGradePoint = (grade) => {
+    switch (grade) {
+      case "A":
+        return 3.75;
+      case "A-":
+        return 3.5;
+      case "B+":
+        return 3.3;
+      case "B":
+        return 3.0;
+      case "B-":
+        return 2.7;
+      case "C+":
+        return 2.3;
+      case " C ":
+        return 2.0;
+      case "C":
+        return 2.0;
+      case "C-":
+        return 1.7;
+      case "D+":
+        return 1.3;
+      case "D":
+        return 1.0;
+      default:
+        return 0;
+    }
+  };
   return (
     <div className="main-box">
       <header className="nav-bg">
@@ -117,7 +147,7 @@ function App() {
         </button>
 
         {result && (
-          <div className="result-box">
+          <div className="result-box"style={{marginBottom:"10pc"}} >
             <table>
               <thead>
                 <tr>
@@ -158,8 +188,9 @@ function App() {
                 fontWeight: "600",
               }}
             >
-              Calculated GPA : {getTotalGpa().toFixed(2)} /{" "}{getTotalEarnedGPA()}{" "}
-              ={" "}{(getTotalGpa() / getTotalEarnedGPA()).toFixed(2)}
+              Calculated GPA : {getTotalGpa().toFixed(2)} /{" "}
+              {getTotalEarnedGPA()} ={" "}
+              {(getTotalGpa() / getTotalEarnedGPA()).toFixed(2)}
             </p>
           </div>
         )}
@@ -169,32 +200,3 @@ function App() {
 }
 
 export default App;
-
-function getGradePoint(grade) {
-  switch (grade) {
-    case "A":
-      return 3.75;
-    case "A-":
-      return 3.5;
-    case "B+":
-      return 3.3;
-    case "B":
-      return 3.0;
-    case "B-":
-      return 2.7;
-    case "C+":
-      return 2.3;
-    case " C ":
-      return 2.0;
-    case "C":
-      return 2.0;
-    case "C-":
-      return 1.7;
-    case "D+":
-      return 1.3;
-    case "D":
-      return 1.0;
-    default:
-      return 0;
-  }
-}
