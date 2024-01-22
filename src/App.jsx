@@ -37,14 +37,14 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3002/upload", {
+      const response = await fetch("https://local-project.onrender.com/upload", {
         method: "POST",
         body: formData,
+        "Content-Type": "application/pdf",
       });
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         setResult(data);
       } else {
         setResult("Error uploading PDF.");
@@ -77,6 +77,7 @@ function App() {
     }, 0);
   };
 
+  console.log(result);
   return (
     <div className="main-box">
       <header className="nav-bg">
@@ -87,13 +88,30 @@ function App() {
           </div>
         </nav>
       </header>
-      <main className="main-box-middle">
-        <input
-          type="file"
-          accept=".pdf"
-          onChange={handleFileChange}
-          className="btn"
-        />
+      <main className="main-box-middle" style={{ marginTop: "10pc" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+          }}
+        >
+          <label
+            style={{
+              textAlign: "start",
+              fontSize: "14px",
+              color: "white",
+            }}
+          >
+            Please select a .pdf file only
+          </label>
+          <input
+            type="file"
+            accept=".pdf"
+            onChange={handleFileChange}
+            className="btn"
+          />
+        </div>
         <button onClick={processPDF} disabled={loading} className="btn">
           {loading ? "Loading..." : "Process PDF"}
         </button>
@@ -101,55 +119,38 @@ function App() {
         {result && (
           <div className="result-box">
             <table>
-              <tr>
-                <th>Subject</th>
-                <th>Earn</th>
-                <th>Grd</th>
-                <th>Total GPA</th>
-              </tr>
-              {result?.map((data, i) => (
-                <tr key={i}>
-                  <td>{data?.subject}</td>
-                  <td>{data?.gpa}</td>
-                  <td>{data?.grd}</td>
-                  {/* <td>
-                    {data?.gpa} x{" "}
-                    {data?.grd === "A"
-                      ? 3.75
-                      : data?.grd === "A-"
-                      ? 3.5
-                      : data?.grd === "B+"
-                      ? 3.3
-                      : data?.grd === "B"
-                      ? 3.0
-                      : data?.grd === "B-"
-                      ? 2.7
-                      : data?.grd === "C+"
-                      ? 2.3
-                      : data?.grd === "C"
-                      ? 2.0
-                      : data?.grd === "C-"
-                      ? 1.7
-                      : data?.grd === "D+"
-                      ? 1.3
-                      : data?.grd === "D"
-                      ? 1.0
-                      : 0}
-                  </td> */}
-                  <td>
-                    {data?.gpa !== undefined && data?.grd
-                      ? `${data?.gpa} x ${getGradePoint(data?.grd)}`
-                      : "N/A"}
-                    ={(data?.gpa * getGradePoint(data?.grd)).toFixed(2)}
-                  </td>
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Earn</th>
+                  <th>Grd</th>
+                  <th>Total GPA</th>
                 </tr>
-              ))}
-              <tr>
-                <td></td>
-                <td> Total Credits: {getTotalEarnedGPA()}</td>
-                <td></td>
-                <td> Total GPA: {getTotalGpa().toFixed(2)}</td>
-              </tr>
+              </thead>
+              <tbody>
+                {result?.map((data, i) => (
+                  <tr key={i}>
+                    <td>{data?.subject}</td>
+                    <td>{data?.gpa}</td>
+                    <td>{data?.grd}</td>
+
+                    <td>
+                      {data?.gpa !== undefined && data?.grd
+                        ? `${data?.gpa} x ${getGradePoint(data?.grd)}`
+                        : "N/A"}{" "}
+                      = {(data?.gpa * getGradePoint(data?.grd)).toFixed(2)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td></td>
+                  <td> Total Credits: {getTotalEarnedGPA()}</td>
+                  <td></td>
+                  <td> Total GPA: {getTotalGpa().toFixed(2)}</td>
+                </tr>
+              </tfoot>
             </table>
             <p
               style={{
@@ -157,9 +158,8 @@ function App() {
                 fontWeight: "600",
               }}
             >
-              Calculated GPA : {getTotalGpa().toFixed(2)} /{" "}
-              {getTotalEarnedGPA()} =
-              {(getTotalGpa() / getTotalEarnedGPA()).toFixed(2)}
+              Calculated GPA : {getTotalGpa().toFixed(2)} /{" "}{getTotalEarnedGPA()}{" "}
+              ={" "}{(getTotalGpa() / getTotalEarnedGPA()).toFixed(2)}
             </p>
           </div>
         )}
@@ -184,6 +184,8 @@ function getGradePoint(grade) {
       return 2.7;
     case "C+":
       return 2.3;
+    case " C ":
+      return 2.0;
     case "C":
       return 2.0;
     case "C-":
