@@ -1,8 +1,7 @@
 import { FcStart } from "react-icons/fc";
 import { VscDebugRestart } from "react-icons/vsc";
 import { BsPauseBtnFill } from "react-icons/bs";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react"; 
 
 export const commonStyle = {
   padding: "10px",
@@ -91,16 +90,7 @@ function StopWatch() {
         alignItems: "center",
         flexDirection: "column",
       }}
-    >
-      <Link to={"/"}>
-        <button
-          style={{
-            marginLeft: "auto",
-          }}
-        >
-          Back
-        </button>
-      </Link>
+    >  
       <div
         style={{
           display: "flex",
