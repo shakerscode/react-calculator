@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom"; 
-import React from "react"; 
-import Calculator from "./component/Calculator";
+import React from "react";  
 import StopWatch from "./component/StopWatch";
  
 const routes = createBrowserRouter([ 
